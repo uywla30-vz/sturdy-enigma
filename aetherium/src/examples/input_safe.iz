@@ -1,0 +1,34 @@
+Aetherium
+TypeGauge Gauge
+Structure Report {
+    Gauge Fault_Code;
+    Coffer Report_Message[128];
+    Coffer Timestamp[20]; 
+}
+
+Function Main_Conduit () -> Gauge {
+    Stockpile Gauge Input_Reading;
+    
+    Catastrophe {
+        Ponder "Enter target pressure (Gauge):";
+        // Esto fallará en modo no interactivo (input vacio)
+        Consign Input_Reading = Consult_Panel As Gauge;
+        Ponder "Pressure set successfully.";
+    }
+
+    Bypass As Report Error_Log {
+        Ponder "--- INPUT FAILURE ---";
+        Ponder "Reason: ";
+        Ponder Error_Log.Report_Message;
+        
+        Ponder "Applying Emergency Default Pressure...";
+        Consign Input_Reading = 50;
+    }
+
+    Resolution {
+        Ponder "Final Pressure Setting: ";
+        Ponder Input_Reading;
+    }
+
+    Dispatch 0;
+}

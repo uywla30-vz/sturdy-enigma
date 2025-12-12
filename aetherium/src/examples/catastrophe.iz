@@ -1,0 +1,40 @@
+Aetherium
+TypeGauge Gauge
+Structure Report {
+    Gauge Fault_Code;
+    Coffer Report_Message[128];
+    Coffer Timestamp[20]; 
+}
+
+Function Main_Conduit () -> Gauge {
+    Stockpile Gauge Steam_Pressure = 100;
+    Stockpile Gauge Valve_Setting = 0; // Causa el fallo
+
+    Catastrophe {
+        Ponder "Attempting critical calculation...";
+
+        // Esta línea generará una división por cero (Ailment: Fault_Code 1)
+        Stockpile Gauge Efficiency_Ratio;
+        Consign Efficiency_Ratio = Steam_Pressure / Valve_Setting; 
+        
+        Ponder "Calculation successful.";
+    } 
+    
+    // Este bloque se ejecuta SI ocurre una Catástrofe.
+    Bypass As Report Fault_Log {
+        Ponder "--- AILMENT DETECTED ---";
+        Ponder "Report Message: ";
+        Ponder Fault_Log.Report_Message;
+        
+        // Asignamos una resolución (reparación) y salimos de la función
+        Consign Valve_Setting = 1;
+        Ponder "Valve Setting corrected. Resuming operation...";
+    }
+    
+    // Este bloque se ejecuta SIEMPRE (limpieza, registro final)
+    Resolution {
+        Ponder "Logging procedure closed.";
+    }
+
+    Dispatch 0;
+}

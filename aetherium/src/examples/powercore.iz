@@ -1,0 +1,47 @@
+Aetherium
+TypeGauge Gauge
+TypeManometer Manometer
+
+// Define la estructura para el sensor
+Structure Power_Reading {
+    Manometer Input_Pressure;
+    Manometer Waste_Heat;
+    Gauge Engine_ID;
+}
+
+Function Calculate_Efficiency (Manometer Pressure_In, Manometer Heat_Waste) -> Manometer {
+    // Declaración sin inicialización (sintaxis simple)
+    Stockpile Manometer Efficiency_Result;
+
+    // Asignación estricta: Consign <Variable> = <Expresión>;
+    Consign Efficiency_Result = (Pressure_In - Heat_Waste) / Pressure_In;
+    
+    Dispatch Efficiency_Result;
+}
+
+Function Main_Conduit () -> Gauge {
+    // Declaración de estructura
+    Stockpile Power_Reading Engine_Data;
+
+    // Asignación estricta de miembros de la estructura
+    Consign Engine_Data.Input_Pressure = 45.0;
+    Consign Engine_Data.Waste_Heat = 12.5;
+    Consign Engine_Data.Engine_ID = 3;
+
+    Stockpile Manometer Efficiency_Score;
+
+    Consign Efficiency_Score = Calculate_Efficiency (Engine_Data.Input_Pressure, Engine_Data.Waste_Heat);
+
+    Ponder "Engine ID: ";
+    Ponder Engine_Data.Engine_ID;
+    Ponder "Efficiency Quotient: ";
+    Ponder Efficiency_Score;
+    
+    If Efficiency_Score Exceeds 0.7 {
+        Ponder "Assessment: Optimal Performance. Record Verified.";
+    } Else {
+        Ponder "Assessment: Sub-Optimal. Requires Maintenance.";
+    }
+
+    Dispatch 0;
+}

@@ -1,0 +1,37 @@
+Aetherium
+TypeGauge Gauge
+TypeApp Apparatus
+
+// Función que simula el trabajo concurrente
+Function Lathe_Operation () -> Gauge {
+    Ponder "Lathe #1 commencing work...";
+    // Simular trabajo (no tenemos sleep, pero podemos hacer un loop)
+    Stockpile Gauge i = 0;
+    Loop While i LessThan 1000 {
+        Consign i = i + 1;
+    }
+    Ponder "Lathe #1 work in progress...";
+    Consign i = 0;
+    Loop While i LessThan 1000 {
+        Consign i = i + 1;
+    }
+    Dispatch 1;
+}
+
+Function Main_Conduit () -> Gauge {
+    // Declaramos dónde almacenar el identificador de la tarea
+    Stockpile Apparatus Lathe_Apparatus_ID;
+
+    // Lanzamos la operación Lathe_Operation en paralelo
+    Ponder "Main Supervisor assigning task...";
+    Consign Lathe_Apparatus_ID = Workstation Lathe_Operation;
+
+    Ponder "Main Supervisor continues duties...";
+    
+    // Esperamos que Lathe_Operation termine
+    Join_Halt Lathe_Apparatus_ID;
+    
+    Ponder "Lathe #1 operation complete. Reporting final status.";
+
+    Dispatch 0;
+}

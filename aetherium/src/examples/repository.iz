@@ -1,0 +1,58 @@
+Aetherium
+TypeGauge Gauge
+Structure Report {
+    Gauge Fault_Code;
+    Coffer Report_Message[128];
+    Coffer Timestamp[20]; 
+}
+
+Function Data_Management () -> Gauge {
+    // 1. Declarar el repositorio
+    Stockpile Repository Logbook; 
+    Stockpile Coffer Data_Buffer[256];
+
+    Ponder "Opening Ledger for transcription...";
+    
+    // 2. Abrir para Escritura ('w' en el modo moderno)
+    // Mode_Write: Crea el archivo o trunca el existente
+    Consign Logbook = Open_Ledger "production_tally.txt" Mode_Write; 
+
+    // 3. Escribir datos
+    Consign Data_Buffer = "Time stamp: 10:00:00 - Tally 500";
+    Ponder "Transcribing: ";
+    Ponder Data_Buffer;
+    
+    Transcribe Logbook Data_Buffer;
+
+    // 4. Cerrar
+    Close_Ledger Logbook; 
+    
+    Ponder "Ledger Closed. Reopening for verification...";
+    
+    // 5. Reabrir para Lectura ('r')
+    Consign Logbook = Open_Ledger "production_tally.txt" Mode_Read;
+    
+    // 6. Leer y mostrar
+    Catalogue Logbook Data_Buffer;
+    Ponder "Retrieved Data: ";
+    Ponder Data_Buffer;
+    
+    Close_Ledger Logbook;
+    Dispatch 0;
+}
+
+Function Main_Conduit () -> Gauge {
+    // Wrapper safe
+    Catastrophe {
+        Stockpile Gauge Result;
+        Consign Result = Data_Management();
+    }
+    Bypass As Report Error {
+        Ponder "--- REPOSITORY FAILURE ---";
+        Ponder Error.Report_Message;
+    }
+    Resolution {
+        Ponder "Data Management Protocol Complete.";
+    }
+    Dispatch 0;
+}

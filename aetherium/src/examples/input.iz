@@ -1,0 +1,18 @@
+Aetherium
+TypeGauge Gauge
+TypeManometer Manometer
+
+Function Main_Conduit () -> Gauge {
+    Stockpile Gauge Input_Reading;
+    
+    // Pregunta al usuario por un entero (Gauge)
+    Ponder "Enter target pressure (Gauge):";
+    
+    // La función Consult_Panel debe manejar la conversión
+    Consign Input_Reading = Consult_Panel As Gauge;
+    
+    Ponder "Pressure set to: ";
+    Ponder Input_Reading;
+
+    Dispatch 0;
+}

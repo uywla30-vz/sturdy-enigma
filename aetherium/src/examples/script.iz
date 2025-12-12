@@ -1,0 +1,35 @@
+Aetherium
+TypeApp Factory_Supervisor
+
+// Define el tipo Gauge (entero)
+TypeGauge Gauge
+
+Function Factory_Supervisor (Gauge Daily_Target) -> Gauge {
+    // Declaración e inicialización estricta: Stockpile Gauge <Nombre> = <Valor>;
+    Stockpile Gauge Current_Tally = 0; 
+
+    Loop While Current_Tally LessThan Daily_Target {
+        // Asignación estricta con Consign
+        Consign Current_Tally = Current_Tally + 1;
+        Ponder "Production Increment!";
+    }
+
+    Dispatch Current_Tally;
+}
+
+Function Main_Conduit () -> Gauge {
+    // Declaración e inicialización estricta
+    Stockpile Gauge Target_Quota = 15; 
+    Stockpile Gauge Final_Output;
+
+    // Asignación estricta del retorno de la función
+    Consign Final_Output = Factory_Supervisor (Target_Quota);
+
+    If Final_Output Exceeds Target_Quota {
+        Ponder "Quota Exceeded. Efficiency Verified.";
+    } Else {
+        Ponder "Output Verified.";
+    }
+
+    Dispatch 0;
+}

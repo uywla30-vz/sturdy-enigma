@@ -1,0 +1,9 @@
+Aetherium
+TypeGauge Gauge
+
+Function Lathe_Operation (Gauge Material_Batch) -> Gauge {
+    // Código para operar el torno
+    Ponder "Lathe Operation started on batch: ";
+    Ponder Material_Batch;
+    Dispatch 1;
+}

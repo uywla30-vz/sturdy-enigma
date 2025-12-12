@@ -1,0 +1,104 @@
+Aetherium
+
+// Definición de Tipos de Recursos
+TypeGauge Gauge
+TypeManometer Manometer
+
+// Estructura de Reporte para capturar Fallos (Ailments)
+Structure Report {
+    Gauge Fault_Code;
+    Coffer Report_Message[128];
+    Coffer Timestamp[20];
+}
+
+// --- FASES DEL JUEGO ---
+
+// Función para generar el Código Secreto del Núcleo (simula generación aleatoria)
+Function Core_Code_Generate () -> Gauge {
+    // Código fijo para simulación: 42
+    Dispatch 42;
+}
+
+// Función principal de la lógica del juego
+Function Gameplay_Loop (Gauge Target_Code, Gauge Max_Attempts) -> Gauge {
+    Stockpile Gauge Attempt = 0;
+    // CORRECCIÓN APLICADA: Usar 0 - 1 en lugar de -1
+    Stockpile Gauge Input_Guess = 0 - 1; 
+    Stockpile Gauge Game_Status = 0; // 0: Jugando, 1: Gana, 2: Pierde
+
+    Ponder "--- Aetherium: Iniciando Maniobra de Sincronización de Núcleo ---";
+    Ponder "Se requiere la entrada del Código. Es un valor Gauge (entero) entre 1 y 100.";
+
+    // Bucle principal del juego
+    Loop While Attempt LessThan Max_Attempts {
+        Ponder "--- Intento Actual: ";
+        Ponder Attempt + 1;
+
+        // Bloque de manejo de errores en la entrada (si el usuario no introduce un número)
+        Catastrophe {
+            Ponder "Ingrese el Código (Gauge):";
+            Consign Input_Guess = Consult_Panel As Gauge;
+        } 
+        
+        // Bloque que se ejecuta SÓLO si falla la entrada (Catastrophe)
+        Bypass As Report Error_Log {
+            Ponder "--- FALLO DE ENTRADA DETECTADO ---";
+            Ponder "Ailment: ";
+            Ponder Error_Log.Report_Message;
+            Ponder "Entrada corrupta. Se anula el intento actual.";
+        }
+        
+        // El contador de intentos avanza siempre
+        Consign Attempt = Attempt + 1;
+
+        // Evaluación de la lógica central
+        If Input_Guess Equates Target_Code {
+            Ponder "Sincronización Lograda. Núcleo Restaurado.";
+            Consign Game_Status = 1;
+            Consign Attempt = Max_Attempts; // Forzar la salida del Loop
+        } Else {
+            If Input_Guess LessThan Target_Code {
+                Ponder "Frecuencia demasiado baja. Se necesita mayor potencia.";
+            } Else { // Input_Guess Exceeds Target_Code
+                Ponder "Frecuencia sobrecargada. Se requiere una descarga inmediata.";
+            }
+        }
+    }
+    
+    // Evaluación del resultado y envío del código de estado
+    If Game_Status Equates 1 {
+        Dispatch 1; // Éxito
+    } Else {
+        Ponder "Se excedieron los intentos. Secuencia de bloqueo de Núcleo iniciada.";
+        Dispatch 0; // Fallo
+    }
+}
+
+// --- CONDUIT PRINCIPAL ---
+
+Function Main_Conduit () -> Gauge {
+    Stockpile Gauge Secret_Code;
+    Stockpile Gauge Maximum_Attempts = 5;
+    Stockpile Gauge Final_Result;
+
+    // Inicialización
+    Consign Secret_Code = Core_Code_Generate();
+    
+    // Bloque de control para errores no manejados durante el juego (fallo del sistema)
+    Catastrophe {
+        Consign Final_Result = Gameplay_Loop(Secret_Code, Maximum_Attempts);
+    } 
+    Bypass As Report Global_Error {
+        Ponder "--- CATASTROFE GLOBAL ---";
+        Ponder "Fallo del sistema inmanejable: ";
+        Ponder Global_Error.Report_Message;
+        Ponder "Código de Retorno Forzado: 0 - 1";
+        // CORRECCIÓN APLICADA: Usar 0 - 1 en lugar de -1
+        Dispatch 0 - 1; 
+    }
+    Resolution {
+        Ponder "--- Maniobra de Sincronización Finalizada ---";
+    }
+    
+    Dispatch Final_Result;
+}

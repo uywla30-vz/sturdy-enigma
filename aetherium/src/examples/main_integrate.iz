@@ -1,0 +1,19 @@
+Aetherium
+TypeGauge Gauge
+
+// Carga la librería, haciéndola disponible
+Integrate Lathe_Operation From "lathe_library.iz"; 
+
+Function Main_Conduit () -> Gauge {
+    Stockpile Gauge Batch_ID = 42;
+    Stockpile Gauge Status;
+
+    // Se llama a la función Lathe_Operation, que ahora está en el scope global
+    Consign Status = Lathe_Operation (Batch_ID); 
+    
+    If Status Equates 1 {
+        Ponder "External Plan Integrated and Executed Successfully.";
+    }
+
+    Dispatch 0;
+}
