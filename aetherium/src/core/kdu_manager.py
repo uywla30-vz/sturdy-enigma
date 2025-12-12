@@ -2,6 +2,7 @@ import threading
 import queue
 import time
 import sys
+import uuid
 
 # Try importing pygame; if not present, this module will fail when used, which is expected.
 try:
@@ -153,6 +154,7 @@ class DisplayServer:
 # We will use a singleton pattern here.
 
 _server_queue = None
+_active_kinetics = [] # Logic Thread State
 
 def init_server():
     global _server_queue
@@ -162,6 +164,9 @@ def init_server():
 
 def get_queue():
     return _server_queue
+
+def get_active_kinetics():
+    return _active_kinetics
 
 class DisplayClient:
     @staticmethod
@@ -209,3 +214,23 @@ class DisplayClient:
         q = get_queue()
         if q:
             q.put({'type': 'QUIT'})
+
+class KineticLogicObject:
+    def __init__(self, shape, color, x, y, width=0, height=0, radius=0):
+        self.id = str(uuid.uuid4())
+        self.shape = shape
+        self.color = color
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.radius = radius
+
+        # Register in global list
+        _active_kinetics.append(self)
+
+        # Register with Server
+        DisplayClient.register_kinetic(
+            self.id, shape, color, x, y,
+            width=width, height=height, radius=radius
+        )
