@@ -54,7 +54,7 @@ class StockpileSyntax(SyntaxModule):
             from src.core.expression import evaluate_expression
             val, idx = evaluate_expression(context, tokens, idx)
             context.set_variable(var_name, val)
-        elif context.get_structure(type_name) if type_name not in ['Gauge', 'Manometer', 'Coffer', 'Apparatus', 'Repository', 'int', 'float'] else False:
+        elif context.get_structure(type_name) if type_name not in ['Gauge', 'Manometer', 'Coffer', 'Apparatus', 'Repository', 'Canvas', 'Kinetic', 'int', 'float'] else False:
              # Initialize structure with default dict
              # Check if it is a structure
              try:

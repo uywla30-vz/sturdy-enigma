@@ -1,0 +1,45 @@
+Aetherium
+
+Structure Machine_Crank {
+    Gauge Pos_X;
+    Gauge Pos_Y;
+    Kinetic Display_Object;
+}
+
+Function Main_Conduit () -> Gauge {
+    // 1. Initialize Display
+    Stockpile Canvas Main_Screen;
+    Consign Main_Screen = Open_Display 800 By 600 Title "Kinetic Test";
+
+    // 2. Create Machine Object
+    Stockpile Machine_Crank Crank_One;
+    Consign Crank_One.Pos_X = 100;
+    Consign Crank_One.Pos_Y = 100;
+
+    // 3. Create Shape
+    Consign Crank_One.Display_Object = Draw_Shape Main_Screen Rectangle Green 50 Wide 50 Tall At 100, 100;
+
+    // 4. Animation Loop
+    Ponder "Starting Animation Loop...";
+
+    Stockpile Gauge Counter;
+    Consign Counter = 0;
+
+    Loop While Counter LessThan 100 {
+        // Update Position
+        Consign Crank_One.Pos_X = Crank_One.Pos_X + 5;
+        Consign Crank_One.Pos_Y = Crank_One.Pos_Y + 2;
+
+        Relocate Crank_One.Display_Object To Crank_One.Pos_X, Crank_One.Pos_Y;
+
+        Render Main_Screen;
+
+        Delay_Cycle 50; // 50ms
+
+        Consign Counter = Counter + 1;
+        // Ponder Counter;
+    }
+
+    Ponder "Animation Complete.";
+    Dispatch 0;
+}

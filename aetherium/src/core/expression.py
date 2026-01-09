@@ -175,7 +175,16 @@ def parse_primary(context: Context, tokens: List[Any], index: int) -> Tuple[Any,
         except ValueError:
              raise AetheriumAilment(fault_code=2, message="Input Malfunction")
 
-    
+    # --- KDU: Open_Display ---
+    if token.type_id == 'TOKEN_OPEN_DISPLAY':
+        from src.syntax.kdu_syntax import execute_open_display
+        return execute_open_display(context, tokens, index + 1)
+
+    # --- KDU: Draw_Shape ---
+    if token.type_id == 'TOKEN_DRAW_SHAPE':
+        from src.syntax.kdu_syntax import execute_draw_shape
+        return execute_draw_shape(context, tokens, index + 1)
+
     if token.type_id == 'TOKEN_IDENTIFIER':
         # Could be a variable or a function call
         # Check if next token is '('
